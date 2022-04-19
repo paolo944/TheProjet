@@ -3,6 +3,8 @@
         "key.h": "c",
         "encryption.h": "c",
         "protected.h": "c",
-        "celltree.h": "c"
+        "celltree.h": "c",
+        "dirent.h": "c",
+        "block.h": "c"
     }
 }

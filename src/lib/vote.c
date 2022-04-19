@@ -13,11 +13,14 @@ void submit_vote(Protected* p){
 
 void create_block(CellTree* tree, Key* author, int d) {
     Block* Pending_block=malloc(sizeof(Block));
-    Pending_block->votes=read_protected("Pending_votes.txt");
+    CellProtected* cpro=malloc(sizeof(CellProtected));
+    cpro->data=read_protected("Pending_votes.txt");
+
     remove("Pending_votes.txt");
     Pending_block->author=author;
     Pending_block->previous_hash=last_node(tree)->block->hash;
     //peut-être il faut rajouter a la fin du tree
+    Pending_block->hash="123";
     compute_proof_of_work(Pending_block,d);
     ecrire_block(Pending_block,"Pending_bloc.txt");
 }
@@ -30,4 +33,45 @@ void add_block(int d, char* name){
         ecrire_block(b,str);
     }
     remove("Pending_block.txt");
+}
+
+CellTree* read_tree(){
+    CellTree** T=malloc(sizeof(CellTree*));
+    DIR *rep =opendir("lib/Blockchain/");
+    if(rep!=NULL){
+        int i=0;
+        struct dirent* dir;
+        while ((dir=readdir(rep))){
+            if(strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
+                T[i]=create_node(lire_block(dir->d_name));
+                i+=1;
+            }
+        }
+        closedir(rep);
+    }
+    int j=0;
+    while (T[j]){
+        int k=0;
+        while(T[k]){
+            if(T[k]->block->previous_hash==T[j]->block->hash){
+                add_child(T[j],T[k]);
+            }
+            k+=1;
+        }
+        j+=1;
+    }
+    j=0;
+    while (T[j]){
+        if(T[j]->father==NULL){
+            return T[j];
+        }
+    }       
+    printf("Erreur: Pas de racine");
+    return NULL;
+}
+
+Key* compute_winner_BT(CellTree* tree, CellKey* candidates, CellKey* voters, int sizeC, int sizeV){
+    //ListeVote extraire les votes
+    verification_fraude(listeVote); 
+    return compute_winner(listeVote,candidates,voters,sizeC,sizeV);
 }

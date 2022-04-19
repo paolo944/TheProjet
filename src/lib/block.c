@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void ecrire_block(Block *b, char *nomFic){
-    FILE *fic = fopen(nomFic, "w");
+    FILE *fic = fopen(nomFic, "w+");
 
     fprintf(fic, "%s", key_to_str(b->author));
     fputc('\n', fic);

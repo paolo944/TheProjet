@@ -2,6 +2,7 @@
 #include "cellProtected.h"
 #include "block.h"
 #include "cellTree.h"
+#include "stdlib.h"
 
 void submit_vote(Protected* p);
 void create_block(CellTree* tree, Key* author, int d);
